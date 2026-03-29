@@ -1,4 +1,14 @@
 /* --- Parallax Scroll (Optimized) --- */
+import {
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  orderBy,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const reviewsRef = collection(window.db, "reviews");
 const parallaxBg = document.querySelector('.parallax-bg');
 if (parallaxBg) {
     let ticking = false;
@@ -83,47 +93,40 @@ const reviewForm = document.getElementById('review-submission-form');
 const reviewList = document.getElementById('review-list');
 
 // Load saved reviews
-window.addEventListener('DOMContentLoaded', () => {
-    if (reviewList) {
-        const savedReviews = JSON.parse(localStorage.getItem('reviews')) || [];
-        savedReviews.forEach(review => addReviewToDOM(review.name, review.text, review.rating));
-    }
+window.addEventListener('DOMContentLoaded', async () => {
+  const q = query(reviewsRef, orderBy("createdAt", "desc"));
+  const snapshot = await getDocs(q);
+
+  snapshot.forEach(doc => {
+    const r = doc.data();
+    addReviewToDOM(r.name, r.text, r.rating);
+  });
 });
 
 // Submit Review
-if (reviewForm) {
-    reviewForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const name = document.getElementById('review-name').value.trim();
-        const text = document.getElementById('review-text').value.trim();
-        if (name && text && currentRating > 0) {
-            addReviewToDOM(name, text, currentRating);
-            const existingReviews = JSON.parse(localStorage.getItem('reviews')) || [];
-            existingReviews.unshift({ name, text, rating: currentRating });
-            localStorage.setItem('reviews', JSON.stringify(existingReviews));
-            reviewForm.reset();
-            currentRating = 0;
-            updateStars();
-            alert('Thank you for your review!');
-        } else {
-            alert('Please fill out all fields and provide a rating.');
-        }
-    });
-}
+reviewForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
 
-function addReviewToDOM(name, text, rating) {
-    if (!reviewList) return;
-    const reviewCard = document.createElement('div');
-    reviewCard.classList.add('review-card', 'fade-in');
-    const starsHtml = '★'.repeat(rating) + '☆'.repeat(5 - rating);
-    reviewCard.innerHTML = `
-        <div class="stars">${starsHtml}</div>
-        <p class="review-text">"${text}"</p>
-        <p class="reviewer-name">- ${name}</p>
-    `;
-    reviewList.prepend(reviewCard);
-    setTimeout(() => reviewCard.classList.add('active'), 10);
-}
+  const name = document.getElementById('review-name').value.trim();
+  const text = document.getElementById('review-text').value.trim();
+
+  if (name && text && currentRating > 0) {
+    await addDoc(reviewsRef, {
+      name: name,
+      text: text,
+      rating: currentRating,
+      createdAt: serverTimestamp()
+    });
+
+    addReviewToDOM(name, text, currentRating);
+    reviewForm.reset();
+    currentRating = 0;
+    updateStars();
+    alert("Review submitted!");
+  } else {
+    alert("Fill all fields & rating");
+  }
+});
 
 /* --- Mobile Menu Toggle --- */
 const mobileMenu = document.getElementById('mobile-menu');
