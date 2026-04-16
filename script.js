@@ -113,8 +113,33 @@ const updateStars = () => {
     });
 };
 
+const loadExternalScript = (src) => new Promise((resolve, reject) => {
+    const existing = document.querySelector(`script[src="${src}"]`);
+    if (existing) {
+        if (existing.dataset.loaded === "true") {
+            resolve();
+            return;
+        }
+
+        existing.addEventListener("load", () => resolve(), { once: true });
+        existing.addEventListener("error", reject, { once: true });
+        return;
+    }
+
+    const script = document.createElement("script");
+    script.src = src;
+    script.defer = true;
+    script.addEventListener("load", () => {
+        script.dataset.loaded = "true";
+        resolve();
+    }, { once: true });
+    script.addEventListener("error", () => reject(new Error(`Failed to load ${src}`)), { once: true });
+    document.body.appendChild(script);
+});
+
 const reviewForm = document.getElementById('review-submission-form');
 const reviewList = document.getElementById('review-list');
+const reviewsSection = document.getElementById('reviews');
 const featuredGoogleReviews = [
     {
         name: "A. Kumar",
@@ -144,9 +169,44 @@ const firebaseConfig = {
     measurementId: "G-DH58P52CJR"
 };
 
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-const reviewsRef = db.collection("reviews");
+let reviewsRef = null;
+let reviewsBootPromise = null;
+let featuredReviewsLoaded = false;
+
+const bootReviews = async () => {
+    if (!reviewList || !reviewsSection) return null;
+    if (reviewsBootPromise) return reviewsBootPromise;
+
+    reviewsBootPromise = (async () => {
+        await loadExternalScript("https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js");
+        await loadExternalScript("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js");
+
+        if (!window.firebase) {
+            throw new Error("Firebase did not load");
+        }
+
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+
+        const db = firebase.firestore();
+        reviewsRef = db.collection("reviews");
+
+        if (!featuredReviewsLoaded) {
+            loadFeaturedGoogleReviews();
+            featuredReviewsLoaded = true;
+        }
+
+        await loadReviewsFromFirestore();
+        return reviewsRef;
+    })().catch((error) => {
+        reviewsBootPromise = null;
+        console.error("Failed to initialize reviews:", error);
+        return null;
+    });
+
+    return reviewsBootPromise;
+};
 
 const createReviewCard = ({ name, reviewText, rating, source }) => {
     const safeRating = Math.max(1, Math.min(5, Number(rating) || 1));
@@ -200,7 +260,7 @@ const loadFeaturedGoogleReviews = () => {
 };
 
 const loadReviewsFromFirestore = async () => {
-    if (!reviewList) return;
+    if (!reviewList || !reviewsRef) return;
     try {
         const snapshot = await reviewsRef.orderBy("createdAt", "desc").get();
         snapshot.forEach((doc) => {
@@ -227,6 +287,12 @@ if (reviewForm) {
         }
 
         try {
+            const readyReviewsRef = await bootReviews();
+            if (!readyReviewsRef) {
+                alert('Unable to connect right now. Please try again.');
+                return;
+            }
+
             await reviewsRef.add({
                 name: name,
                 text: reviewText,
@@ -246,12 +312,104 @@ if (reviewForm) {
     });
 }
 
-if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", () => {
-        loadFeaturedGoogleReviews();
-        loadReviewsFromFirestore();
+if (reviewsSection) {
+    const reviewLoader = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                bootReviews();
+                reviewLoader.unobserve(entry.target);
+            }
+        });
+    }, {
+        rootMargin: "250px 0px",
+        threshold: 0.05
     });
-} else {
-    loadFeaturedGoogleReviews();
-    loadReviewsFromFirestore();
+
+    reviewLoader.observe(reviewsSection);
 }
+
+
+
+
+
+
+
+
+function autoScrollWithPause(containerSelector, options = {}) {
+    const container = document.querySelector(containerSelector);
+    if (!container || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (container.dataset.autoScrollReady === "true") return;
+
+    const items = Array.from(container.children);
+    if (items.length < 2) return;
+
+    const {
+        delay = 4200,
+        resetDelay = 700,
+        cloneCount = 1
+    } = options;
+
+    const clonesToAdd = Math.min(cloneCount, items.length);
+    for (let i = 0; i < clonesToAdd; i += 1) {
+        const clone = items[i].cloneNode(true);
+        clone.setAttribute("aria-hidden", "true");
+        clone.classList.add("menu-clone");
+        container.appendChild(clone);
+    }
+
+    const getSlides = () => Array.from(container.children);
+    let currentIndex = 0;
+    let autoScrollInterval;
+    let resetTimeout;
+
+    const stopAutoScroll = () => {
+        clearInterval(autoScrollInterval);
+        clearTimeout(resetTimeout);
+        autoScrollInterval = null;
+        resetTimeout = null;
+    };
+
+    const scrollToSlide = (index, behavior = "smooth") => {
+        const slides = getSlides();
+        const target = slides[index];
+        if (!target) return;
+
+        container.scrollTo({
+            left: target.offsetLeft,
+            behavior
+        });
+    };
+
+    const stepForward = () => {
+        const originalCount = items.length;
+        currentIndex += 1;
+        scrollToSlide(currentIndex);
+
+        if (currentIndex >= originalCount) {
+            resetTimeout = window.setTimeout(() => {
+                container.scrollTo({ left: 0, behavior: "auto" });
+                currentIndex = 0;
+            }, resetDelay);
+        }
+    };
+
+    const startAutoScroll = () => {
+        if (autoScrollInterval) return;
+        autoScrollInterval = window.setInterval(stepForward, delay);
+    };
+
+    container.addEventListener("touchstart", stopAutoScroll, { passive: true });
+    container.addEventListener("mouseenter", stopAutoScroll);
+    container.addEventListener("focusin", stopAutoScroll);
+
+    container.addEventListener("touchend", startAutoScroll);
+    container.addEventListener("mouseleave", startAutoScroll);
+    container.addEventListener("focusout", startAutoScroll);
+
+    container.dataset.autoScrollReady = "true";
+    startAutoScroll();
+}
+
+// Apply to both
+autoScrollWithPause(".food-gallery", { cloneCount: 1 });
+autoScrollWithPause(".menu-grid", { cloneCount: 2 });
