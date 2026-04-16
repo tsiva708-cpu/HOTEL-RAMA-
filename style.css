@@ -101,7 +101,6 @@ nav ul a:hover {
     outline: 3px solid rgba(230, 126, 34, 0.35);
     outline-offset: 2px;
 }
-
 .parallax-container {
     position: relative;
     height: 100vh;
@@ -312,83 +311,6 @@ nav ul a:hover {
     align-items: flex-start;
 }
 
-.review-source-note {
-    margin: -0.5rem 0 1.5rem;
-    text-align: center;
-    color: #6b5d53;
-    font-size: 0.98rem;
-}
-
-.review-source-note a {
-    color: #d35400;
-    font-weight: 600;
-    text-decoration: none;
-}
-
-.review-source-note a:hover {
-    text-decoration: underline;
-}
-
-.google-rating-summary {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1.5rem;
-    background-color: white;
-    padding: 1.5rem 2rem;
-    border-radius: 12px;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
-    margin: 0 auto 3rem;
-    max-width: fit-content;
-    border: 1px solid #f2e4d8;
-}
-
-.google-logo-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 60px;
-    height: 60px;
-    background-color: #f8f9fa;
-    border-radius: 50%;
-    font-size: 2rem;
-    color: #4285F4;
-    /* Google Blue */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-}
-
-.rating-details {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 1.5rem;
-}
-
-.rating-number {
-    font-size: 3rem;
-    font-weight: 800;
-    color: #333;
-    line-height: 1;
-}
-
-.rating-stars-count {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 0.25rem;
-}
-
-.rating-stars-count .stars {
-    font-size: 1.3rem;
-    margin-bottom: 0;
-}
-
-.review-count {
-    font-size: 0.95rem;
-    color: #666;
-    font-weight: 500;
-}
-
 #review-list {
     display: flex;
     flex-direction: column;
@@ -411,31 +333,6 @@ nav ul a:hover {
     color: #f1c40f;
     font-size: 1.2rem;
     margin-bottom: 0.5rem;
-}
-
-.review-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 0.7rem;
-    margin-bottom: 0.45rem;
-}
-
-.review-source-badge {
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.3px;
-    padding: 0.2rem 0.55rem;
-    border-radius: 999px;
-    color: #fff;
-}
-
-.source-google {
-    background-color: #1a73e8;
-}
-
-.source-website {
-    background-color: #e67e22;
 }
 
 .review-form {
@@ -590,7 +487,6 @@ nav ul a:hover {
         opacity: 0;
         transform: translateY(16px);
     }
-
     to {
         opacity: 1;
         transform: translateY(0);
@@ -655,40 +551,10 @@ footer {
         gap: 0.5rem;
     }
 
-    .nav-top-row {
-        position: relative;
-        justify-content: center;
-    }
-
-    nav .logo-container {
-        width: 100%;
-        justify-content: center;
-        padding-top: 0.2rem;
-    }
-
     .mobile-menu-btn {
-        display: inline-flex !important;
+        display: inline-flex;
         align-items: center;
         justify-content: center;
-        position: absolute;
-        left: auto;
-        right: 1rem;
-        top: 1.25rem;
-        transform: none;
-        z-index: 1003;
-        background: rgba(255, 255, 255, 0.98);
-        border: 1px solid rgba(230, 126, 34, 0.65);
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-        flex: 0 0 auto;
-        width: 40px;
-        height: 40px;
-        margin-right: 0;
-    }
-
-    .mobile-menu-btn i {
-        font-size: 17px;
-        color: #a04000;
-        line-height: 1;
     }
 
     nav ul.nav-links {
@@ -786,7 +652,6 @@ footer {
     * {
         scroll-behavior: auto !important;
     }
-
     .fade-in,
     .slide-in,
     nav ul.nav-links {
