@@ -72,6 +72,7 @@ nav ul a {
     text-decoration: none;
     color: #555;
     font-weight: 500;
+    white-space: nowrap;
     transition: color 0.3s ease, transform 0.3s ease;
 }
 
@@ -101,6 +102,7 @@ nav ul a:hover {
     outline: 3px solid rgba(230, 126, 34, 0.35);
     outline-offset: 2px;
 }
+
 .parallax-container {
     position: relative;
     height: 100vh;
@@ -311,6 +313,83 @@ nav ul a:hover {
     align-items: flex-start;
 }
 
+.review-source-note {
+    margin: -0.5rem 0 1.5rem;
+    text-align: center;
+    color: #6b5d53;
+    font-size: 0.98rem;
+}
+
+.review-source-note a {
+    color: #d35400;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.review-source-note a:hover {
+    text-decoration: underline;
+}
+
+.google-rating-summary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    background-color: white;
+    padding: 1.5rem 2rem;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+    margin: 0 auto 3rem;
+    max-width: fit-content;
+    border: 1px solid #f2e4d8;
+}
+
+.google-logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    background-color: #f8f9fa;
+    border-radius: 50%;
+    font-size: 2rem;
+    color: #4285F4;
+    /* Google Blue */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.rating-details {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.rating-number {
+    font-size: 3rem;
+    font-weight: 800;
+    color: #333;
+    line-height: 1;
+}
+
+.rating-stars-count {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.25rem;
+}
+
+.rating-stars-count .stars {
+    font-size: 1.3rem;
+    margin-bottom: 0;
+}
+
+.review-count {
+    font-size: 0.95rem;
+    color: #666;
+    font-weight: 500;
+}
+
 #review-list {
     display: flex;
     flex-direction: column;
@@ -333,6 +412,31 @@ nav ul a:hover {
     color: #f1c40f;
     font-size: 1.2rem;
     margin-bottom: 0.5rem;
+}
+
+.review-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.7rem;
+    margin-bottom: 0.45rem;
+}
+
+.review-source-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    color: #fff;
+}
+
+.source-google {
+    background-color: #1a73e8;
+}
+
+.source-website {
+    background-color: #e67e22;
 }
 
 .review-form {
@@ -487,6 +591,7 @@ nav ul a:hover {
         opacity: 0;
         transform: translateY(16px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -551,19 +656,51 @@ footer {
         gap: 0.5rem;
     }
 
+    .nav-top-row {
+        position: relative;
+        justify-content: center;
+    }
+
+    nav .logo-container {
+        width: 100%;
+        justify-content: center;
+        padding-top: 0.2rem;
+    }
+
     .mobile-menu-btn {
-        display: inline-flex;
+        display: inline-flex !important;
         align-items: center;
         justify-content: center;
+        position: absolute;
+        right: auto;
+        left: 1rem;
+        top: 1.25rem;
+        transform: none;
+        z-index: 1003;
+        background: rgba(255, 255, 255, 0.98);
+        border: 1px solid rgba(230, 126, 34, 0.65);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+        flex: 0 0 auto;
+        width: 40px;
+        height: 40px;
+        margin-right: 0;
+    }
+
+    .mobile-menu-btn i {
+        font-size: 17px;
+        color: #a04000;
+        line-height: 1;
     }
 
     nav ul.nav-links {
         width: 100%;
-        padding: 0.5rem 0.5rem 0.9rem;
+        padding: 0.65rem;
         margin: 0.25rem 0 0;
-        gap: 0;
-        flex-direction: column;
-        align-items: stretch;
+        gap: 0.4rem;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
         background: rgba(255, 255, 255, 0.92);
         border: 1px solid rgba(0, 0, 0, 0.06);
         border-radius: 14px;
@@ -572,6 +709,7 @@ footer {
         overflow: hidden;
         opacity: 0;
         transform: translateY(-6px);
+        pointer-events: none;
         transition: max-height 0.28s ease, opacity 0.2s ease, transform 0.28s ease;
     }
 
@@ -579,17 +717,48 @@ footer {
         max-height: 360px;
         opacity: 1;
         transform: translateY(0);
+        pointer-events: auto;
     }
 
     nav ul.nav-links li {
-        padding: 0.25rem 0.25rem;
+        padding: 0;
+        opacity: 0;
+        transform: translateX(-24px);
+        transition: transform 0.3s ease, opacity 0.22s ease;
+    }
+
+    nav ul.nav-links.showing li {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    nav ul.nav-links li:nth-child(1) {
+        transition-delay: 0.04s;
+    }
+
+    nav ul.nav-links li:nth-child(2) {
+        transition-delay: 0.08s;
+    }
+
+    nav ul.nav-links li:nth-child(3) {
+        transition-delay: 0.12s;
+    }
+
+    nav ul.nav-links li:nth-child(4) {
+        transition-delay: 0.16s;
+    }
+
+    nav ul.nav-links li:nth-child(5) {
+        transition-delay: 0.2s;
     }
 
     nav ul.nav-links a {
-        display: block;
-        padding: 0.85rem 0.9rem;
+        display: inline-block;
+        padding: 0.5rem 0.7rem;
+        font-size: 0.9rem;
         border-radius: 12px;
         transform: none;
+        background: rgba(230, 126, 34, 0.06);
     }
 
     nav ul.nav-links a:hover {
@@ -632,7 +801,207 @@ footer {
     }
 }
 
+.food-gallery {
+    display: flex;
+    overflow-x: auto;
+    gap: 1rem;
+    padding-bottom: 10px;
+
+    scroll-snap-type: x mandatory;
+}
+
+.food-gallery,
+.menu-grid {
+    scroll-behavior: smooth;
+}
+
+.food-item {
+    min-width: 85%;  /* each card width */
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+}
+
+/* Optional scrollbar */
+.food-gallery::-webkit-scrollbar {
+    height: 6px;
+}
+
+.food-gallery::-webkit-scrollbar-thumb {
+    background: #e67e22;
+    border-radius: 10px;
+}
+
+.menu-grid {
+    display: flex;
+    overflow-x: auto;
+    gap: 1rem;
+    padding-bottom: 10px;
+
+    scroll-snap-type: x mandatory;
+}
+
+.menu-item {
+    min-width: 85%;
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+}
+
+/* Optional scrollbar */
+.menu-grid::-webkit-scrollbar {
+    height: 6px;
+}
+
+.menu-grid::-webkit-scrollbar-thumb {
+    background: #e67e22;
+    border-radius: 10px;
+}
+
+.food-gallery,
+.menu-grid {
+    display: flex;
+    overflow-x: auto;
+    gap: 1rem;
+
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch; /* smooth iPhone-like */
+    scroll-behavior: smooth;
+}
+
+/* Hide scrollbar (clean app look) */
+.food-gallery::-webkit-scrollbar,
+.menu-grid::-webkit-scrollbar {
+    display: none;
+}
+
+.food-item,
+.menu-item {
+    min-width: 85%;
+    flex: 0 0 auto;
+    scroll-snap-align: start; /* center like apps */
+}
+
+#menu .menu-grid {
+    gap: 1.5rem;
+    padding: 0.9rem 0.95rem 1.4rem;
+    scroll-padding-inline: 0.95rem;
+}
+
+#menu .menu-item {
+    position: relative;
+    overflow: hidden;
+    padding: 2rem 1.55rem 1.8rem;
+    border: 1px solid rgba(230, 126, 34, 0.12);
+    background: linear-gradient(180deg, #ffffff 0%, #fff8f2 100%);
+    box-shadow: 0 14px 34px rgba(74, 36, 7, 0.08);
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+        border-color 0.35s ease;
+    will-change: transform;
+}
+
+#menu .menu-item::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.18) 42%,
+            rgba(255, 255, 255, 0.65) 50%,
+            rgba(255, 255, 255, 0.18) 58%,
+            transparent 100%);
+    transform: translateX(-135%);
+    transition: transform 0.75s ease;
+    pointer-events: none;
+}
+
+#menu .menu-item.hover-effect:hover,
+#menu .menu-item.hover-effect:focus-within {
+    transform: translateY(-12px) scale(1.01);
+    border-color: rgba(230, 126, 34, 0.3);
+    box-shadow: 0 22px 46px rgba(74, 36, 7, 0.16);
+}
+
+#menu .menu-item.hover-effect:hover::before,
+#menu .menu-item.hover-effect:focus-within::before {
+    transform: translateX(135%);
+}
+
+#menu .menu-item img {
+    max-width: 160px;
+    object-fit: cover;
+    margin-bottom: 1.35rem;
+    box-shadow: 0 10px 26px rgba(230, 126, 34, 0.16);
+    transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.4s ease,
+        filter 0.4s ease;
+    will-change: transform;
+}
+
+#menu .menu-item h3 {
+    margin: 0 0 0.75rem;
+    font-size: 1.3rem;
+    line-height: 1.25;
+}
+
+#menu .menu-item p {
+    margin: 0;
+    line-height: 1.7;
+    padding-inline: 0.2rem;
+}
+
+#menu .menu-item .price {
+    display: inline-block;
+    margin-top: 1rem;
+}
+
+#menu .menu-item .price:empty {
+    display: none;
+    margin-top: 0;
+}
+
+#menu .menu-item.hover-effect:hover img,
+#menu .menu-item.hover-effect:focus-within img {
+    transform: translateY(-4px) scale(1.06) rotate(-2deg);
+    box-shadow: 0 18px 32px rgba(230, 126, 34, 0.24);
+    filter: saturate(1.04);
+}
+
+#menu .menu-item h3,
+#menu .menu-item p,
+#menu .menu-item .price {
+    position: relative;
+    z-index: 1;
+}
+
+#menu .menu-item.menu-clone {
+    pointer-events: none;
+}
+
 @media (max-width: 480px) {
+    #menu .menu-grid {
+        gap: 1.1rem;
+        padding: 0.7rem 0.65rem 1.05rem;
+        scroll-padding-inline: 0.65rem;
+    }
+
+    #menu .menu-item {
+        padding: 1.6rem 1.15rem 1.4rem;
+    }
+
+    #menu .menu-item img {
+        margin-bottom: 1.1rem;
+    }
+
+    #menu .menu-item h3 {
+        margin-bottom: 0.6rem;
+        font-size: 1.15rem;
+    }
+
+    #menu .menu-item p {
+        line-height: 1.6;
+        padding-inline: 0;
+    }
+
     .parallax-content h1 {
         font-size: 1.45rem;
         letter-spacing: 1px;
@@ -652,9 +1021,140 @@ footer {
     * {
         scroll-behavior: auto !important;
     }
+
     .fade-in,
     .slide-in,
     nav ul.nav-links {
         transition: none !important;
+    }
+
+    #menu .menu-item,
+    #menu .menu-item img,
+    #menu .menu-item::before {
+        transition: none !important;
+        transform: none !important;
+    }
+}
+
+/* =========================
+   GLOBAL RESPONSIVE FIXES
+========================= */
+* {
+    box-sizing: border-box;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* =========================
+   DESKTOP IMPROVEMENTS
+========================= */
+@media (min-width: 1024px) {
+    nav ul.nav-links {
+        gap: 2.6em;
+    }
+
+    .container {
+        padding: 5rem 8%;
+    }
+
+    /* KEEP FLEX FOR SCROLL (IMPORTANT FIX) */
+    .menu-grid,
+    .food-gallery {
+        display: flex;              /* 🔥 CHANGE */
+        overflow-x: auto;           /* 🔥 ENABLE SCROLL */
+        gap: 1.5rem;
+    }
+
+    .menu-item,
+    .food-item {
+        min-width: 300px;           /* desktop card size */
+        flex: 0 0 auto;
+    }
+
+    .reviews_container {
+        gap: 4rem;
+    }
+}
+
+/* =========================
+   TABLET IMPROVEMENTS
+========================= */
+@media (max-width: 1024px) {
+    .menu-grid,
+    .food-gallery {
+        display: flex;          /* 🔥 FIX */
+        overflow-x: auto;
+        gap: 1rem;
+    }
+
+    .menu-item,
+    .food-item {
+        min-width: 250px;
+        flex: 0 0 auto;
+    }
+}
+/* =========================
+   MOBILE IMPROVEMENTS
+========================= */
+@media (max-width: 768px) {
+
+    /* Fix navbar overlap */
+    body {
+        padding-top: 70px;
+    }
+
+    nav {
+        padding: 0.6rem 1rem;
+    }
+
+    /* Hero section */
+    .parallax-container {
+        height: 80vh;
+    }
+
+    /* About section */
+    .metrics-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* Menu */
+    .menu-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Food gallery */
+    .food-gallery {
+        grid-template-columns: 1fr;
+    }
+
+    /* Reviews */
+    .reviews-container {
+        grid-template-columns: 1fr;
+    }
+
+    /* Contact */
+    .contact-content {
+        flex-direction: column;
+    }
+
+    .map-container iframe {
+        height: 220px;
+    }
+}
+
+/* =========================
+   SMALL MOBILE (VERY SMALL)
+========================= */
+@media (max-width: 400px) {
+    .logo-text {
+        font-size: 1.2rem;
+    }
+
+    .parallax-content h1 {
+        font-size: 1.2rem;
     }
 }
