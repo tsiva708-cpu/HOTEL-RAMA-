@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hotel Rama - A Taste of Love</title>
     <link rel="icon" type="image/x-icon" href="logo1.png" />
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+    <link rel="preload" as="image" href="pexels-iamabdullahsheik-9738985.jpg">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -15,7 +18,7 @@
     <nav>
         <div class="nav-top-row">
             <div class="logo-container">
-                <img src="logo1.png" alt="Hotel Rama Logo" class="logo">
+                <img src="logo1.png" alt="Hotel Rama Logo" class="logo" loading="eager" fetchpriority="high" decoding="async">
                 <span class="logo-text">HOTEL RAMA</span>
             </div>
 
@@ -66,19 +69,19 @@
 
         <div class="food-gallery">
             <div class="food-item fade-in">
-                <img src="gourmet-biryani-with-saffron-rice-chicken-generated-by-ai.jpg" alt="Biryani">
+                <img src="gourmet-biryani-with-saffron-rice-chicken-generated-by-ai.jpg" alt="Biryani" loading="lazy" decoding="async">
                 <div class="food-overlay">
                     <p>Our signature Biryani, cooked with aromatic spices and tender meat.</p>
                 </div>
             </div>
             <div class="food-item fade-in">
-                <img src="delicious-indian-dosa-arrangement.jpg" alt="Dosa">
+                <img src="delicious-indian-dosa-arrangement.jpg" alt="Dosa" loading="lazy" decoding="async">
                 <div class="food-overlay">
                     <p>Crispy, golden Dosa served with a variety of chutneys.</p>
                 </div>
             </div>
             <div class="food-item fade-in">
-                <img src="chicken-fried-hot-pot-with-spicy-sauce-korean-style.jpg" alt="Thali">
+                <img src="chicken-fried-hot-pot-with-spicy-sauce-korean-style.jpg" alt="Thali" loading="lazy" decoding="async">
                 <div class="food-overlay">
                     <p>Experience the full spectrum of flavors with our special Thali.</p>
                 </div>
@@ -89,26 +92,26 @@
     <section id="menu" class="container">
         <h2 class="section-title slide-in">Our Menu</h2>
         <div class="menu-grid">
-            <div class="menu-item hover-effect">
-                <img src="chicken-fried-hot-pot-with-spicy-sauce-korean-style.jpg" alt="Item 1">
+            <div class="menu-item hover-effect fade-in stagger-1">
+                <img src="chicken-fried-hot-pot-with-spicy-sauce-korean-style.jpg" alt="Item 1" loading="lazy" decoding="async">
                 <h3>Chicken Curry</h3>
                 <p>Spicy and rich chicken curry with a traditional touch.</p>
                 <span class="price"></span>
             </div>
-            <div class="menu-item hover-effect">
-                <img src="gourmet-biryani-with-saffron-rice-chicken-generated-by-ai.jpg" alt="Item 2">
+            <div class="menu-item hover-effect fade-in stagger-2">
+                <img src="gourmet-biryani-with-saffron-rice-chicken-generated-by-ai.jpg" alt="Item 2" loading="lazy" decoding="async">
                 <h3>Chicken Biryani</h3>
                 <p>Fragrant basmati rice cooked with tender chicken pieces.</p>
                 <span class="price"></span>
             </div>
-            <div class="menu-item hover-effect">
-                <img src="baked-chicken-wings-asian-style-tomatoes-sauce-plate.jpg" alt="Item 3">
+            <div class="menu-item hover-effect fade-in stagger-3">
+                <img src="baked-chicken-wings-asian-style-tomatoes-sauce-plate.jpg" alt="Item 3" loading="lazy" decoding="async">
                 <h3>chicken Fry</h3>
                 <p>Fresh catch of the day, marinated and fried to perfection.</p>
                 <span class="price"></span>
             </div>
-            <div class="menu-item hover-effect">
-                <img src="pre-prepared-food-showcasing-ready-eat-delicious-meals-go.jpg" alt="Item 4">
+            <div class="menu-item hover-effect fade-in stagger-4">
+                <img src="pre-prepared-food-showcasing-ready-eat-delicious-meals-go.jpg" alt="Item 4" loading="lazy" decoding="async">
                 <h3>Paneer Butter Masala</h3>
                 <p>Soft paneer cubes in a creamy and tangy gravy.</p>
                 <span class="price"></span>
@@ -199,9 +202,7 @@
         <p>&copy; 2025 Hotel Rama. All Rights Reserved.</p>
     </footer>
 
-    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
 </body>
 
 </html>
